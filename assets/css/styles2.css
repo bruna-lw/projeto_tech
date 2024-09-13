@@ -1,0 +1,21 @@
+.edit-button {
+    background-color: #141414;
+    color: #FFFFFF;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.edit-button:hover {
+    background-color: #333333;
+}
+
+h4 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    padding-top: 20px;
+}

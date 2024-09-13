@@ -3,6 +3,9 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once 'classes/produto.php';
+// Criação de uma instância da classe Produto
+$produto = new Produto("projeto", "localhost", "root", "");
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="./assets/css/gerenciamento_produto.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
 </head>
 
 <body>
@@ -38,34 +42,34 @@ if (session_status() === PHP_SESSION_NONE) {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Imagem</th>
+              <!-- <th>Imagem</th> -->
               <th>Nome</th>
               <th>SKU</th>
               <th>Descrição</th>
               <th>Valor</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td><img src="assets/images/image-happy-theanine.jpg" class="img-produto" alt="" /></td>
-              <td>Happy Theanine</td>
-              <td>14585</td>
-              <td><span class="descr">Produto formulado com L-teanina pura e concentrada — uma poderosa substância
-                  bioativa encontrada
-                  naturalmente nas folhas de Camellia sinensis</span></td>
-              <td>R$ 160,00</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td><img src="assets/images/image-happy-theanine.jpg" class="img-produto" alt="" /></td>
-              <td>Happy Theanine</td>
-              <td>14585</td>
-              <td><span class="descr">Produto formulado com L-teanina pura e concentrada — uma poderosa substância
-                  bioativa encontrada
-                  naturalmente nas folhas de Camellia sinensis</span></td>
-              <td>R$ 160,00</td>
-            </tr>
+            <?php
+              $dados = $produto->buscarDados();
+              if(count($dados) > 0){
+                  for ($i=0; $i < count($dados); $i++){
+                      // abrindo a linha para preencher os dados com <tr> em html
+                      echo "<tr>";
+                      foreach ($dados[$i] as $k => $v) {
+                              // abrindo o campo para preencher a coluna com <td> em html
+                              echo "<td>".$v."</td>";
+                      }
+                      // ultima coluna não é preenchida com dados do banco, pois são links fixos. Por isso fecha o php, deixa o html e volta a abrir php após.
+                    ?><td>
+                      <a href="editar-produto.php?id_up=<?php echo $dados[$i]['id_produto']; ?>" class="edit-button">Editar</a> 
+                      <a href="produtos.php?id=<?php echo $dados[$i]['id_produto']; ?>" class="edit-button">Excluir</a>
+                </td><?php
+                  }
+                      echo "</tr>";
+              }
+            ?> 
           </tbody>
         </table>
       </div>
@@ -74,3 +78,12 @@ if (session_status() === PHP_SESSION_NONE) {
 </body>
 
 </html>
+
+<?php
+  // Método para excluir produto a partir do botão Excluir
+  if(isset($_GET['id'])){
+    $id_prod = addslashes($_GET['id']);
+    $produto->excluirProduto($id_prod);
+    header("location: produtos.php");
+  }
+?>

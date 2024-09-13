@@ -41,8 +41,35 @@ class Produto {
 
      public function buscarDados(){
         $dadosProduto = array();
-        $cmd = $this->pdo->query("SELECT * FROM produto ORDER BY id_produto DESC");
+        $cmd = $this->pdo->query("SELECT id_produto, nome, sku, descricao, valor FROM produto ORDER BY id_produto");
         $dadosProduto = $cmd->fetchAll(PDO::FETCH_ASSOC);
         return $dadosProduto;
     }
+
+    public function excluirProduto($id){
+        $cmd = $this->pdo->prepare("DELETE FROM produto WHERE id_produto = :id");
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
+    }
+
+    // Buscar os dados de um produto específico
+    public function buscarDadosProduto($id){
+        $res = array();
+        $cmd = $this->pdo->prepare("SELECT * FROM produto WHERE id_produto = :id");
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
+        $res = $cmd->fetch(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    // Atualizar os dados no BD
+    public function atualizarProduto($id, $nome, $sku, $valor, $descricao){
+        $cmd = $this->pdo->prepare("UPDATE produto SET nome = :n, sku = :sku, valor = :v, descricao = :d WHERE id_produto = :id");
+        $cmd->bindValue(":n", $nome);
+        $cmd->bindValue(":sku", $sku);
+        $cmd->bindValue(":v", $valor);
+        $cmd->bindValue(":d", $descricao);
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
+        }
 }

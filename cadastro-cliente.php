@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'classes/cliente.php';
-// Criação de uma instância da classe Usuario
+// Criação de uma instância da classe Cliente
 $cliente = new Cliente("projeto", "localhost", "root", "");
 ?>
 
@@ -19,6 +19,7 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
 </head>
 
 <body>
