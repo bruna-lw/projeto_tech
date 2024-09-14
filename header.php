@@ -20,6 +20,7 @@
           <a href="cadastro-usuario.php">Cadastrar usuário</a>
           <a href="cadastro-produto.php">Cadastrar produto</a>
           <a href="pedidos.php">Novo pedido</a>
+          <a href="minha-conta.php">Minha conta</a>
           <a href="controller/logout.php">Sair da conta</a>
         </div>
       </div>

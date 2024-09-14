@@ -58,7 +58,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
   <section class="page-cadastro-produto paddingBottom50">
     <div class="container">
       <div>
-        <a href="dashboard.php" class="link-voltar">
+        <a href="produtos.php" class="link-voltar">
           <img src="assets/images/arrow.svg" alt="">
           <span>Editar produto</span>
         </a>

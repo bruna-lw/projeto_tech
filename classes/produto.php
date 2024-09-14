@@ -39,6 +39,7 @@ class Produto {
          }
      }
 
+    //  Função para buscar e retornar os dados do BD
      public function buscarDados(){
         $dadosProduto = array();
         $cmd = $this->pdo->query("SELECT id_produto, nome, sku, descricao, valor FROM produto ORDER BY id_produto");
@@ -46,6 +47,7 @@ class Produto {
         return $dadosProduto;
     }
 
+    // Função para excluir o produto do BD
     public function excluirProduto($id){
         $cmd = $this->pdo->prepare("DELETE FROM produto WHERE id_produto = :id");
         $cmd->bindValue(":id", $id);
@@ -73,3 +75,5 @@ class Produto {
         $cmd->execute();
         }
 }
+
+?>

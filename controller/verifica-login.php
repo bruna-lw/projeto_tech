@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch();
 
         if ($user) {
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id'] = $user['id_usuario'];
             $_SESSION['user_name'] = $user['nome'];
             header('Location: /projeto-capacitacao-tecnologia-main/dashboard.php'); // Redireciona para a página de dashboard
             exit;
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo $error;
         }
     } else {
-        $error = 'Preencha todos os campos corretamente!';
+        $error = 'Preencha todos os campos!';
         echo $error;
     }
 }

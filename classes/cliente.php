@@ -38,4 +38,42 @@ class Cliente {
             return true;
          }
      }
+
+         //  Função para buscar e retornar os dados do BD
+         public function buscarDados(){
+            $dadosCliente = array();
+            $cmd = $this->pdo->query("SELECT id_cliente, nome, cpf, email, telefone FROM cliente ORDER BY id_cliente");
+            $dadosCliente = $cmd->fetchAll(PDO::FETCH_ASSOC);
+            return $dadosCliente;
+        }
+    
+        // Função para excluir o cliente do BD
+        public function excluirCliente($id){
+            $cmd = $this->pdo->prepare("DELETE FROM cliente WHERE id_cliente = :id");
+            $cmd->bindValue(":id", $id);
+            $cmd->execute();
+        }
+
+        // Função para buscar dados de um cliente específico
+        public function buscarDadosCliente($id){
+            $res = array();
+            $cmd = $this->pdo->prepare("SELECT * FROM cliente WHERE id_cliente = :id");
+            $cmd->bindValue(":id", $id);
+            $cmd->execute();
+            $res = $cmd->fetch(PDO::FETCH_ASSOC);
+            return $res;
+        }
+    
+        // Atualizar os dados no BD
+        public function atualizarCliente($id, $nome, $email, $cpf, $telefone){
+            $cmd = $this->pdo->prepare("UPDATE cliente SET nome = :n, email = :e, cpf = :cpf, telefone = :t WHERE id_cliente = :id");
+            $cmd->bindValue(":n", $nome);
+            $cmd->bindValue(":e", $email);
+            $cmd->bindValue(":cpf", $cpf);
+            $cmd->bindValue(":t", $telefone);
+            $cmd->bindValue(":id", $id);
+            $cmd->execute();
+        }
 }
+
+?>

@@ -42,4 +42,37 @@ class Usuario {
             return true;
          }
      }
+
+     //  Função para buscar e retornar os dados do BD
+     public function buscarDados(){
+        $dadosUsuario = array();
+        $cmd = $this->pdo->query("SELECT * FROM usuario ORDER BY id_usuario");
+        $dadosUsuario = $cmd->fetchAll(PDO::FETCH_ASSOC);
+        return $dadosUsuario;
+    }
+
+    // Função para buscar dados de um usuario específico
+    public function buscarDadosUsuario($id){
+        $res = array();
+        $cmd = $this->pdo->prepare("SELECT * FROM usuario WHERE id_usuario = :id");
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
+        $res = $cmd->fetch(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    // Atualizar os dados no BD
+    public function atualizarUsuario($id, $nome, $email, $cpf, $telefone, $senha){
+
+        $cmd = $this->pdo->prepare("UPDATE usuario SET nome = :n, email = :e, cpf = :cpf, telefone = :t, senha = :s WHERE id_usuario = :id");
+        $cmd->bindValue(":n", $nome);
+        $cmd->bindValue(":e", $email);
+        $cmd->bindValue(":cpf", $cpf);
+        $cmd->bindValue(":t", $telefone);
+        $cmd->bindValue(":id", $id);
+        $cmd->bindValue(":s", $senha);
+        $cmd->execute();
+    }
 }
+
+?>

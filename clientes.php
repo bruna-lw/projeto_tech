@@ -3,6 +3,10 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+require_once 'classes/cliente.php';
+// Criação de uma instância da classe Cliente
+$cliente = new Cliente("projeto", "localhost", "root", "");
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
 </head>
 
 <body>
@@ -41,23 +46,29 @@ if (session_status() === PHP_SESSION_NONE) {
               <th>CPF</th>
               <th>E-mail</th>
               <th>Telefone</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Nome Sobrenome</td>
-              <td>111.333.555-77</td>
-              <td>nome.sobrenome@essentialnutrition.com.br</td>
-              <td>(48) 99999-9999</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Nome Sobrenome</td>
-              <td>111.333.555-77</td>
-              <td>nome.sobrenome@essentialnutrition.com.br</td>
-              <td>(48) 99999-9999</td>
-            </tr>
+            <?php
+              $dados = $cliente->buscarDados();
+              if(count($dados) > 0){
+                  for ($i=0; $i < count($dados); $i++){
+                      // abrindo a linha para preencher os dados com <tr> em html
+                      echo "<tr>";
+                      foreach ($dados[$i] as $k => $v) {
+                              // abrindo o campo para preencher a coluna com <td> em html
+                              echo "<td>".$v."</td>";
+                      }
+                      // ultima coluna não é preenchida com dados do banco, pois são links fixos. Por isso fecha o php, deixa o html e volta a abrir php após.
+                    ?><td>
+                      <a href="editar-cliente.php?id_up=<?php echo $dados[$i]['id_cliente']; ?>" class="edit-button">Editar</a> 
+                      <a href="clientes.php?id=<?php echo $dados[$i]['id_cliente']; ?>" class="edit-button">Excluir</a>
+                </td><?php
+                  }
+                      echo "</tr>";
+              }
+            ?> 
           </tbody>
         </table>
       </div>
@@ -66,3 +77,12 @@ if (session_status() === PHP_SESSION_NONE) {
 </body>
 
 </html>
+
+<?php
+  // Método para excluir cliente a partir do botão Excluir
+  if(isset($_GET['id'])){
+    $id_cli = addslashes($_GET['id']);
+    $cliente->excluirCliente($id_cli);
+    header("location: clientes.php");
+  }
+?>
