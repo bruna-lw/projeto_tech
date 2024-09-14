@@ -17,6 +17,7 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minha Conta</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
 </head>
@@ -43,6 +44,13 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
       $telefone = filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING);
       $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
 
+      if (isset($_FILES['imagem']['tmp_name']) && !empty($_FILES['imagem']['tmp_name'])) {
+        $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+      } else {
+        // Mantem a imagem existente
+        $imagem = $dadosUsuario['imagem'];
+      }
+      
       // Atualiza a senha apenas se o usuário tiver inserido uma nova senha
       if (!empty($senha)) {
         $senha = sha1($senha); // Criptografa a nova senha
@@ -51,9 +59,8 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
     }
 
      if (!empty($nome) && !empty($email)) {
-        $usuario->atualizarUsuario($id_upd, $nome, $email, $cpf, $telefone, $senha);
-        header("location: minha-conta.php");
-        echo '<h4>Dados atualizados com sucesso!</h4>';
+        $usuario->atualizarUsuario($id_upd, $nome, $email, $cpf, $telefone, $senha, $imagem);
+        header("location: dados-atualizados.php");
         } else {
         echo '<h4>Preencha todos os campos.</h4>';
       }
@@ -70,8 +77,8 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
           <span>Meus dados de usuário</span>
         </a>
       </div>
-      <div class="container-small">
-        <form method="post" id="form-cadastro-usuario">
+        <div class="container-small">
+        <form method="post" enctype="multipart/form-data" id="form-cadastro-usuario">
           <div class="bloco-inputs">
             <div>
               <label class="input-label">Nome</label>
@@ -92,6 +99,10 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
             <div>
               <label class="input-label">Senha</label>
               <input type="password" class="senha-input" name="senha" value="">
+            </div>
+            <div>
+              <label class="bt-foto" for="bt-foto">Escolher foto</label>
+              <input id="bt-foto" type="file" name="imagem">
             </div>
           </div>
           <button type="submit" class="button-default">Atualizar dados</button>

@@ -35,6 +35,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
     $dadosProduto = $produto->buscarDadosProduto($id_update);
   }
 
+
   if(isset($_POST['nome'])){
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $id_upd = addslashes($_GET['id_up']);
@@ -43,8 +44,15 @@ $produto = new Produto("projeto", "localhost", "root", "");
       $valor = filter_input(INPUT_POST, 'valor');
       $descricao = filter_input(INPUT_POST, 'descricao', FILTER_SANITIZE_STRING);
 
+      if (isset($_FILES['imagem']['tmp_name']) && !empty($_FILES['imagem']['tmp_name'])) {
+        $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+      } else {
+        // Mantem a imagem existente
+        $imagem = $dadosProduto['imagem'];
+      }
+
      if (!empty($nome) && !empty($sku) && !empty($valor) && !empty($descricao)) {
-        $produto->atualizarProduto($id_upd, $nome, $sku, $valor, $descricao);
+        $produto->atualizarProduto($id_upd, $nome, $sku, $valor, $descricao, $imagem);
         header("location: produtos.php");
         } else {
         echo '<h4>Preencha todos os campos.</h4>';
@@ -64,7 +72,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
         </a>
       </div>
       <div class="container-small">
-        <form method="post" id="form-cadastro-produto">
+        <form method="POST" enctype="multipart/form-data" id="form-cadastro-produto">
           <div class="bloco-inputs">
             <div>
               <label class="input-label">Nome</label>
@@ -85,8 +93,8 @@ $produto = new Produto("projeto", "localhost", "root", "");
               </div>
             </div>
             <div>
-              <label class="bt-arquivo" for="bt-arquivo">Adicionar imagem</label>
-              <input id="bt-arquivo" type="file">
+              <label class="bt-arquivo" for="bt-arquivo">Adicionar ou editar imagem</label>
+              <input id="bt-arquivo" type="file" name="imagem">
             </div>
           </div>
           <button type="submit" class="button-default">Atualizar produto</button>

@@ -42,7 +42,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
           <thead>
             <tr>
               <th>ID</th>
-              <!-- <th>Imagem</th> -->
+              <th>Imagem</th>
               <th>Nome</th>
               <th>SKU</th>
               <th>Descrição</th>
@@ -54,20 +54,29 @@ $produto = new Produto("projeto", "localhost", "root", "");
             <?php
               $dados = $produto->buscarDados();
               if(count($dados) > 0){
-                  for ($i=0; $i < count($dados); $i++){
-                      // abrindo a linha para preencher os dados com <tr> em html
-                      echo "<tr>";
-                      foreach ($dados[$i] as $k => $v) {
-                              // abrindo o campo para preencher a coluna com <td> em html
-                              echo "<td>".$v."</td>";
-                      }
-                      // ultima coluna não é preenchida com dados do banco, pois são links fixos. Por isso fecha o php, deixa o html e volta a abrir php após.
-                    ?><td>
-                      <a href="editar-produto.php?id_up=<?php echo $dados[$i]['id_produto']; ?>" class="edit-button">Editar</a> 
-                      <a href="produtos.php?id=<?php echo $dados[$i]['id_produto']; ?>" class="edit-button">Excluir</a>
-                </td><?php
+                foreach ($dados as $dado) {
+                  echo "<tr>";
+                  echo "<td>".$dado['id_produto']."</td>";
+                  // Exibir a imagem
+                  echo "<td>";
+                  if (!empty($dado['imagem'])) {
+                      // Converter a imagem para base64 e exibir
+                      $imgData = base64_encode($dado['imagem']);
+                      echo "<img src='data:image/jpeg;base64,$imgData' alt='Imagem do Produto' width='100' height='100'>";
+                  } else {
+                      echo "";
                   }
-                      echo "</tr>";
+                  echo "</td>";
+                  echo "<td>".$dado['nome']."</td>";
+                  echo "<td>".$dado['sku']."</td>";
+                  echo "<td>".$dado['descricao']."</td>";
+                  echo "<td>".$dado['valor']."</td>";
+                  echo "<td>
+                          <a href='editar-produto.php?id_up=".$dado['id_produto']."' class='edit-button'>Editar</a>
+                          <a href='produtos.php?id=".$dado['id_produto']."' class='edit-button'>Excluir</a>
+                        </td>";
+                  echo "</tr>";
+              }
               }
             ?> 
           </tbody>

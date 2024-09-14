@@ -35,9 +35,10 @@ $produto = new Produto("projeto", "localhost", "root", "");
     $sku = filter_input(INPUT_POST, 'sku', FILTER_SANITIZE_STRING);
     $valor = filter_input(INPUT_POST, 'valor');
     $descricao = filter_input(INPUT_POST, 'descricao', FILTER_SANITIZE_STRING);
+    $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
 
     if (!empty($nome) && !empty($sku) && !empty($valor) && !empty($descricao)) {
-      if (!$produto->cadastrarProduto($nome, $sku, $valor, $descricao)) {
+      if (!$produto->cadastrarProduto($nome, $sku, $valor, $descricao, $imagem)) {
         echo '<h4>SKU já cadastrado.</h4>';
       } else {
         echo '<h4>Produto cadastrado com sucesso!</h4>';
@@ -58,7 +59,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
         </a>
       </div>
       <div class="container-small">
-        <form method="post" id="form-cadastro-produto">
+        <form method="POST" enctype="multipart/form-data" id="form-cadastro-produto">
           <div class="bloco-inputs">
             <div>
               <label class="input-label">Nome</label>
@@ -80,7 +81,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
             </div>
             <div>
               <label class="bt-arquivo" for="bt-arquivo">Adicionar imagem</label>
-              <input id="bt-arquivo" type="file">
+              <input id="bt-arquivo" type="file" name="imagem">
             </div>
           </div>
           <button type="submit" class="button-default">Salvar novo produto</button>

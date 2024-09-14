@@ -6,6 +6,7 @@ class Usuario {
     protected $cpf;
     protected $telefone;
     protected $senha;
+    protected $imagem;
     private $pdo;
 
     public function __construct($dbname, $host, $user, $senha) {
@@ -62,17 +63,27 @@ class Usuario {
     }
 
     // Atualizar os dados no BD
-    public function atualizarUsuario($id, $nome, $email, $cpf, $telefone, $senha){
-
-        $cmd = $this->pdo->prepare("UPDATE usuario SET nome = :n, email = :e, cpf = :cpf, telefone = :t, senha = :s WHERE id_usuario = :id");
+    public function atualizarUsuario($id, $nome, $email, $cpf, $telefone, $senha, $imagem = null) {
+        // Criptografar a senha antes de atualizá-la
+        $senhaCriptografada = sha1($senha);
+    
+        if ($imagem) {
+            // Atualiza com a imagem incluída
+            $cmd = $this->pdo->prepare("UPDATE usuario SET nome = :n, email = :e, cpf = :cpf, telefone = :t, senha = :s, imagem = :img WHERE id_usuario = :id");
+            $cmd->bindValue(":img", $imagem, PDO::PARAM_LOB); // PDO::PARAM_LOB para grandes objetos binários (imagem)
+        } else {
+            // Atualiza sem a imagem (mantém a imagem anterior)
+            $cmd = $this->pdo->prepare("UPDATE usuario SET nome = :n, email = :e, cpf = :cpf, telefone = :t, senha = :s WHERE id_usuario = :id");
+        }
+    
         $cmd->bindValue(":n", $nome);
         $cmd->bindValue(":e", $email);
         $cmd->bindValue(":cpf", $cpf);
         $cmd->bindValue(":t", $telefone);
         $cmd->bindValue(":id", $id);
-        $cmd->bindValue(":s", $senha);
+        $cmd->bindValue(":s", $senhaCriptografada);
         $cmd->execute();
     }
-}
+}    
 
 ?>
