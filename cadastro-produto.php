@@ -18,6 +18,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
   <title>Cadastro de produto</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
   <link rel="stylesheet" href="./assets/css/cadastro_produto.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
 </head>
@@ -35,13 +36,19 @@ $produto = new Produto("projeto", "localhost", "root", "");
     $sku = filter_input(INPUT_POST, 'sku', FILTER_SANITIZE_STRING);
     $valor = filter_input(INPUT_POST, 'valor');
     $descricao = filter_input(INPUT_POST, 'descricao', FILTER_SANITIZE_STRING);
-    $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+
+    if (isset($_FILES['imagem']['tmp_name']) && !empty($_FILES['imagem']['tmp_name'])) {
+      $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+    } else {
+      // Mantem a imagem existente
+      $imagem = $dadosProduto['imagem'];
+    }
 
     if (!empty($nome) && !empty($sku) && !empty($valor) && !empty($descricao)) {
       if (!$produto->cadastrarProduto($nome, $sku, $valor, $descricao, $imagem)) {
         echo '<h4>SKU já cadastrado.</h4>';
       } else {
-        echo '<h4>Produto cadastrado com sucesso!</h4>';
+        header('location: produtos.php');
       }
     } else {
       echo '<h4>Preencha todos os campos.</h4>';

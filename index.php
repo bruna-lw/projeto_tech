@@ -13,7 +13,7 @@
 <body>
   <header>
     <div class="container">
-      <a href="index.html" class="logo">
+      <a href="index.php" class="logo">
         <img src="assets/images/ho.svg" alt="" />
       </a>
     </div>
@@ -45,7 +45,7 @@
           <button type="submit" class="button-default">Continuar</button>
         </form>
         </a>
-        <a href="cadastro-cliente.php" class="button-default-cd-cli">Ainda não é cadastrado? Clique aqui!</a>
+        <a href="cadastro-usuario.php" class="button-default-cd-cli">Ainda não é cadastrado? Clique aqui!</a>
       </div>
     </div>
   </section>

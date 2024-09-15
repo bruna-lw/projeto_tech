@@ -17,7 +17,7 @@
           <a href="clientes.php">Gerenciar clientes</a>
           <a href="produtos.php">Gerenciar produtos</a>
           <a href="cadastro-cliente.php">Cadastrar cliente</a>
-          <a href="cadastro-usuario.php">Cadastrar usuário</a>
+          <!-- <a href="cadastro-usuario.php">Cadastrar usuário</a> -->
           <a href="cadastro-produto.php">Cadastrar produto</a>
           <a href="pedidos.php">Novo pedido</a>
           <a href="minha-conta.php">Minha conta</a>
@@ -25,4 +25,4 @@
         </div>
       </div>
 
-    </div>
+</div>

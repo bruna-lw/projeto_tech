@@ -65,7 +65,7 @@ class Usuario {
     // Atualizar os dados no BD
     public function atualizarUsuario($id, $nome, $email, $cpf, $telefone, $senha, $imagem = null) {
         // Criptografar a senha antes de atualizá-la
-        $senhaCriptografada = sha1($senha);
+        // $senhaCriptografada = sha1($senha);
     
         if ($imagem) {
             // Atualiza com a imagem incluída
@@ -81,7 +81,14 @@ class Usuario {
         $cmd->bindValue(":cpf", $cpf);
         $cmd->bindValue(":t", $telefone);
         $cmd->bindValue(":id", $id);
-        $cmd->bindValue(":s", $senhaCriptografada);
+        $cmd->bindValue(":s", $senha);
+        $cmd->execute();
+    }
+
+    // Função para excluir o usuario do BD
+    public function excluirUsuario($id){
+        $cmd = $this->pdo->prepare("DELETE FROM usuario WHERE id_usuario = :id");
+        $cmd->bindValue(":id", $id);
         $cmd->execute();
     }
 }    

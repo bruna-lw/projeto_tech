@@ -20,14 +20,23 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
   <title>Cadastro de usuário</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
 </head>
 
 <body>
   <header>
-    <?php
-      require_once 'header.php';
-    ?>
+  <div class="container">
+      <a href="controller/logout.php" class="logo">
+        <img src="assets/images/ho.svg" alt="" />
+      </a>
+      <div class="blc-user">
+        <img src="assets/images/icon-feather-user.svg" alt="" />
+        <span>
+          Olá, <br />
+          visitante
+        </span>
+  </div>
   </header>
   
   <?php
@@ -42,6 +51,7 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
       if (!$usuario->cadastrarUsuario($nome, $email, $cpf, $telefone, $senha)) {
         echo '<h4>Email já está cadastrado.</h4>';
       } else {
+        header("location: novo-usuario-cadastrado.php");
         echo '<h4>Usuário cadastrado com sucesso!</h4>';
       }
     } else {
@@ -54,7 +64,7 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
   <section class="page-cadastro-usuario paddingBottom50">
     <div class="container">
       <div>
-        <a href="dashboard.php" class="link-voltar">
+        <a href="index.php" class="link-voltar">
           <img src="assets/images/arrow.svg" alt="">
           <span>Cadastro de usuário</span>
         </a>

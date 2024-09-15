@@ -21,7 +21,7 @@ class Produto {
 
 
     // Função para cadastrar produto no BD
-    public function cadastrarProduto ($nome, $sku, $valor, $descricao, $imagem){
+    public function cadastrarProduto ($nome, $sku, $valor, $descricao, $imagem = null){
         // antes de cadastrar, vamos verificar se já possui sku cadastrado
         $cmd = $this->pdo->prepare("SELECT id_produto FROM produto WHERE sku = :sku");
         $cmd->bindValue(":sku", $sku);
@@ -29,13 +29,17 @@ class Produto {
         if($cmd->rowCount() > 0){ //sku já existe
             return false;
         } else {
+            if ($imagem) {
+                $cmd = $this->pdo->prepare("INSERT INTO produto SET nome = :n, sku = :sku, valor = :v, descricao = :d, imagem = :img");
+                $cmd->bindValue(":img", $imagem, PDO::PARAM_LOB); // armazenar a imagem como BLOB
+            } else {
+                $cmd = $this->pdo->prepare("INSERT INTO produto (nome, sku, valor, descricao) VALUES (:n, :sku, :v, :d)");
+            }
 
-            $cmd = $this->pdo->prepare("INSERT INTO produto (nome, sku, valor, descricao, imagem) VALUES (:n, :sku, :v, :d, :img)");
             $cmd->bindValue(":n", $nome);
             $cmd->bindValue(":sku", $sku);
             $cmd->bindValue(":v", $valor);
             $cmd->bindValue(":d", $descricao);
-            $cmd->bindValue(":img", $imagem, PDO::PARAM_LOB); // armazenar a imagem como BLOB
             $cmd->execute();
             return true;
          }

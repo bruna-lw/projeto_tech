@@ -106,6 +106,7 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
             </div>
           </div>
           <button type="submit" class="button-default">Atualizar dados</button>
+          <button type="submit" class="button-default" name="acao" value="excluir">Excluir minha conta</button>
         </form>
       </div>
     </div>
@@ -113,3 +114,12 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
 </body>
 
 </html>
+
+<?php
+  // Verifica se o botão excluir foi clicado e exclui usuario
+  if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['acao'] == 'excluir') {
+    $usuario->excluirUsuario($user_id);
+    header('location: index.php');
+  }
+
+?>

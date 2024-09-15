@@ -52,7 +52,7 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
   <section class="page-cadastro-cliente paddingBottom50">
     <div class="container">
       <div>
-        <a href="dashboard.php" class="link-voltar">
+        <a href="clientes.php" class="link-voltar">
           <img src="assets/images/arrow.svg" alt="">
           <span>Cadastro de cliente</span>
         </a>
@@ -77,7 +77,7 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
               <input type="tel" class="telefone-input" name="telefone">
             </div>
           </div>
-          <button type="submit" class="button-default">Salvar novo cliente</button>
+          <button type="submit" class="button-default">Cadastrar novo cliente</button>
         </form>
       </div>
     </div>
