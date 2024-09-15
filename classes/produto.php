@@ -81,6 +81,13 @@ class Produto {
         $cmd->bindValue(":id", $id);
         $cmd->execute();
     }
-}
 
+    // Função para contar os itens do BD
+    public function contarProdutos() {
+        $cmd = $this->pdo->query("SELECT COUNT(*) as total FROM produto");
+        $res = $cmd->fetch(PDO::FETCH_ASSOC);
+        return $res['total']; // retorna o número de produtos
+    }
+
+}
 ?>

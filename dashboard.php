@@ -3,6 +3,17 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+require_once 'classes/cliente.php';
+// Criação de uma instância da classe Cliente
+$cliente = new Cliente("projeto", "localhost", "root", "");
+$totalClientes = $cliente->contarClientes();
+
+require_once 'classes/produto.php';
+// Criação de uma instância da classe Produto
+$produto = new Produto("projeto", "localhost", "root", "");
+$totalProdutos = $produto->contarProdutos();
+
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +42,7 @@ if (session_status() === PHP_SESSION_NONE) {
           <div class="d-flex justify-content-between">
             <div>
               <h2>Clientes</h2>
-              <span>444</span>
+              <?php echo "<span>".$totalClientes."</span>"; ?>
             </div>
             <img src="assets/images/icon-users.svg" alt="">
           </div>
@@ -41,7 +52,7 @@ if (session_status() === PHP_SESSION_NONE) {
           <div class="d-flex justify-content-between">
             <div>
               <h2>Produtos</h2>
-              <span>444</span>
+              <?php echo "<span>".$totalProdutos."</span>"; ?>
             </div>
             <img src="assets/images/icon-product.svg" style="max-width: 76px;" alt="">
           </div>

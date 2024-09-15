@@ -74,6 +74,13 @@ class Cliente {
             $cmd->bindValue(":id", $id);
             $cmd->execute();
         }
+
+        // Função para contar os itens do BD
+        public function contarClientes() {
+            $cmd = $this->pdo->query("SELECT COUNT(*) as total FROM cliente");
+            $res = $cmd->fetch(PDO::FETCH_ASSOC);
+            return $res['total']; // retorna o número de clientes
+        }
 }
 
 ?>
