@@ -16,6 +16,7 @@
         <div class="menu-drop">
           <a href="clientes.php">Gerenciar clientes</a>
           <a href="produtos.php">Gerenciar produtos</a>
+          <a href="estoques.php">Estoque de produtos</a>
           <a href="cadastro-cliente.php">Cadastrar cliente</a>
           <!-- <a href="cadastro-usuario.php">Cadastrar usuário</a> -->
           <a href="cadastro-produto.php">Cadastrar produto</a>

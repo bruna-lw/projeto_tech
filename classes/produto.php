@@ -48,7 +48,7 @@ class Produto {
     //  Função para buscar e retornar os dados do BD
      public function buscarDados(){
         $dadosProduto = array();
-        $cmd = $this->pdo->query("SELECT id_produto, imagem, nome, sku, descricao, valor FROM produto ORDER BY id_produto");
+        $cmd = $this->pdo->query("SELECT id_produto, imagem, nome, sku, descricao, valor, quantidade FROM produto ORDER BY id_produto");
         $dadosProduto = $cmd->fetchAll(PDO::FETCH_ASSOC);
         return $dadosProduto;
     }
@@ -91,6 +91,22 @@ class Produto {
         $cmd = $this->pdo->query("SELECT COUNT(*) as total FROM produto");
         $res = $cmd->fetch(PDO::FETCH_ASSOC);
         return $res['total']; // retorna o número de produtos
+    }
+
+    // Método para adicionar estoque
+    public function adicionarEstoque($id, $quantidade) {
+        $cmd = $this->pdo->prepare("UPDATE produto SET quantidade = quantidade + :q WHERE id_produto = :id");
+        $cmd->bindValue(":q", $quantidade);
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
+    }
+
+    // Método para retirar do estoque
+    public function retirarEstoque($id, $quantidade) {
+        $cmd = $this->pdo->prepare("UPDATE produto SET quantidade = quantidade - :q WHERE id_produto = :id");
+        $cmd->bindValue(":q", $quantidade);
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
     }
 
 }
