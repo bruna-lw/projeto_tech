@@ -15,14 +15,31 @@ if (session_status() === PHP_SESSION_NONE) {
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="./assets/css/novo_pedido.css">
-  <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+      .dropdown {
+          display: none;
+          border: 1px solid #ccc;
+          max-height: 150px;
+          overflow-y: auto;
+          position: absolute;
+          background-color: white;
+          z-index: 1000;
+          width: 100%;
+      }
+      .dropdown-item {
+          padding: 8px;
+          cursor: pointer;
+      }
+      .dropdown-item:hover {
+          background-color: #f0f0f0;
+      }
+  </style>
 </head>
 
 <body>
   <header>
-    <?php
-      require_once 'header.php';
-    ?>
+    <?php require_once 'header.php'; ?>
   </header>
   <section class="page-novo-pedido paddingBottom50">
     <div class="container">
@@ -34,10 +51,11 @@ if (session_status() === PHP_SESSION_NONE) {
       </div>
       <div class="maxW340">
         <label class="input-label">Cliente</label>
-        <input type="text" class="input" name="cliente">
+        <input type="text" class="input" id="input-cliente" placeholder="Digite o nome do cliente" autocomplete="off">
+        <div id="cliente-dropdown" class="dropdown"></div>
       </div>
       <div class="shadow-table">
-        <table>
+        <table id="tabela-pedidos">
           <thead>
             <tr>
               <th>Produto</th>
@@ -47,12 +65,6 @@ if (session_status() === PHP_SESSION_NONE) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><input type="text" class="input" name="produto"></td>
-              <td><input type="text" class="input" name="quantidade"></td>
-              <td><input type="text" class="input" name="valorParcial"></td>
-              <td><a href="#" class="bt-remover"><img src="assets/images/remover.svg" alt="" /></a></td>
-            </tr>
             <tr>
               <td><input type="text" class="input" name="produto"></td>
               <td><input type="text" class="input" name="quantidade"></td>
@@ -99,6 +111,26 @@ if (session_status() === PHP_SESSION_NONE) {
       </div>
     </div>
   </section>
+
+  <script src="controller/dropdown_clientes.js"></script>
+
+  <script>
+    // Função para adicionar linha à tabela
+    function adicionarLinha() {
+      $("#tabela-pedidos tbody").append(
+          "<tr>" +
+          "<td><input type='text' class='input' name='produto'></td>" +
+          "<td><input type='number' class='input' name='quantidade'></td>" +
+          "<td><input type='number' class='input' name='valorParcial'></td>" +
+          "<td><a href='#' class='bt-remover'><img src='assets/images/remover.svg' alt='' /></a></td>" +
+          "</tr>"
+      );
+    }
+
+    $(function() {
+      $(".bt-add-produto").bind("click", adicionarLinha);
+    });
+  </script>
 </body>
 
 </html>

@@ -47,7 +47,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
               <th>SKU</th>
               <!-- <th>Descrição</th> -->
               <!-- <th>Valor</th> -->
-              <th>Estoque</th>
+              <th>Estoque (un)</th>
               <th></th>
             </tr>
           </thead>
