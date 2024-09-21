@@ -18,22 +18,25 @@ if (session_status() === PHP_SESSION_NONE) {
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
       .dropdown {
-          display: none;
-          border: 1px solid #ccc;
-          max-height: 150px;
-          overflow-y: auto;
-          position: absolute;
-          background-color: white;
-          z-index: 1000;
-          width: 100%;
-      }
-      .dropdown-item {
-          padding: 8px;
-          cursor: pointer;
-      }
-      .dropdown-item:hover {
-          background-color: #f0f0f0;
-      }
+            display: none;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            background-color: white;
+            z-index: 1000;
+            width: 100%;
+        }
+        .dropdown-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+        }
+        .dropdown-wrapper {
+            position: relative;
+        }
   </style>
 </head>
 
@@ -66,9 +69,10 @@ if (session_status() === PHP_SESSION_NONE) {
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" class="input" name="produto"></td>
-              <td><input type="text" class="input" name="quantidade"></td>
-              <td><input type="text" class="input" name="valorParcial"></td>
+              <td><input type="text" class="input-produto" name="produto[]" placeholder="Digite o nome do produto">
+              <div class="produto-dropdown dropdown"></div></td>
+              <td><input type="number" class="input" name="quantidade[]" value="1"></td>
+              <td><input type="text" class="input" name="valorParcial[]" readonly></td>
               <td><a href="#" class="bt-remover"><img src="assets/images/remover.svg" alt="" /></a></td>
             </tr>
           </tbody>
@@ -85,15 +89,15 @@ if (session_status() === PHP_SESSION_NONE) {
                   <div class="blc-subtotal d-flex">
                     <div class="d-flex align-items-center">
                       <span>Subtotal</span>
-                      <input type="text" class="input" disabled value="572,00" />
+                      <input type="text" class="input" name="subtotal" disabled value="" />
                     </div>
                     <div class="d-flex align-items-center">
                       <span>Desconto</span>
-                      <input type="text" class="input" value="100,00" />
+                      <input type="text" class="input" id="input-desconto" value="0" />
                     </div>
                     <div class="d-flex align-items-center">
                       <span>Total</span>
-                      <input type="text" class="input" disabled value="472,00" />
+                      <input type="text" class="input" id="valor-total" disabled value="" />
                     </div>
                   </div>
                 </div>
@@ -113,23 +117,33 @@ if (session_status() === PHP_SESSION_NONE) {
   </section>
 
   <script src="controller/dropdown_clientes.js"></script>
+  <script src="controller/dropdown_produtos.js"></script>
 
   <script>
-    // Função para adicionar linha à tabela
-    function adicionarLinha() {
-      $("#tabela-pedidos tbody").append(
-          "<tr>" +
-          "<td><input type='text' class='input' name='produto'></td>" +
-          "<td><input type='number' class='input' name='quantidade'></td>" +
-          "<td><input type='number' class='input' name='valorParcial'></td>" +
-          "<td><a href='#' class='bt-remover'><img src='assets/images/remover.svg' alt='' /></a></td>" +
-          "</tr>"
-      );
-    }
 
-    $(function() {
-      $(".bt-add-produto").bind("click", adicionarLinha);
-    });
+  // Função para adicionar linha à tabela
+  function adicionarLinha() {
+    $("#tabela-pedidos tbody").append(
+        "<tr>" +
+        "<td><input type='text' class='input-produto' name='produto[]' placeholder='Digite o nome do produto'>" +
+        "<div class='produto-dropdown dropdown'></div></td>" +
+        "<td><input type='number' class='input' name='quantidade[]' value='1'></td>" +
+        "<td><input type='text' class='input' name='valorParcial[]' readonly></td>" +
+        "<td><a href='#' class='bt-remover'><img src='assets/images/remover.svg' alt='' /></a></td>" +
+        "</tr>"
+    );
+  }
+
+  $(function() {
+    $(".bt-add-produto").bind("click", adicionarLinha);
+  });
+
+  // Remover linha da tabela
+  $(document).on('click', '.bt-remover', function() {
+    $(this).closest('tr').remove();
+    calcularSubtotal(); // Atualiza o subtotal
+  });
+
   </script>
 </body>
 
