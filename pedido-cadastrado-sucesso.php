@@ -3,6 +3,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Verifica se há um ID de pedido na sessão
+$id_pedido = isset($_SESSION['id_pedido']) ? $_SESSION['id_pedido'] : null;
+
+// Limpa o ID de pedido da sessão para evitar reutilização
+unset($_SESSION['id_pedido']);
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +42,13 @@ if (session_status() === PHP_SESSION_NONE) {
       </div>
     </div>
     <h4>Pedido criado com sucesso!</h4>
+
+    <?php if ($id_pedido): ?>
+        <h4>ID do Pedido: <strong><?php echo htmlspecialchars($id_pedido); ?></strong></h4>
+      <?php else: ?>
+        <h4>Erro ao recuperar o ID do pedido.</h4>
+    <?php endif; ?>
+
   </section>
 </body>
 

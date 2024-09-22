@@ -7,30 +7,6 @@ if (session_status() === PHP_SESSION_NONE) {
 $dsn = "mysql:dbname=projeto;host=localhost";
 $user = "root";
 $password = "";
-
-try {
-    $pdo = new PDO($dsn, $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Erro com o banco de dados: " . $e->getMessage();
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $nome_cliente = filter_input(INPUT_POST, 'nome-cliente', FILTER_SANITIZE_STRING);
-  $produtos = $_POST['produto']; // Captura o array de produtos
-  $valorTotal = filter_input(INPUT_POST, 'valor-total-pedido', FILTER_SANITIZE_STRING);
-
-  // Checa se todos os campos estão preenchidos
-  if (empty($nome_cliente) || empty($produtos) || empty($valorTotal)) {
-      echo '<h4>Preencha todos os campos.</h4>';
-  } else {
-
-      require_once 'classes/pedido.php';
-      $pedido = new Pedido($pdo, $nome_cliente, $produtos, $valorTotal);
-      $pedido->criarPedido();
-  }
-}
   ?>
 
 <!DOCTYPE html>
@@ -42,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <title>Novo pedido</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
+  <link rel="stylesheet" href="./assets/css/styles2.css">
   <link rel="stylesheet" href="./assets/css/novo_pedido.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
@@ -72,6 +49,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <header>
     <?php require_once 'header.php'; ?>
   </header>
+
+  <?php
+  try {
+    $pdo = new PDO($dsn, $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  } catch (PDOException $e) {
+    echo "Erro com o banco de dados: " . $e->getMessage();
+    exit;
+  }
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nome_cliente = filter_input(INPUT_POST, 'nome-cliente', FILTER_SANITIZE_STRING);
+    $produtos = $_POST['produto']; // Captura o array de produtos
+    $valorTotal = filter_input(INPUT_POST, 'valor-total-pedido', FILTER_SANITIZE_STRING);
+
+    // Checa se todos os campos estão preenchidos
+    if (empty($nome_cliente) || empty($produtos) || empty($valorTotal)) {
+      echo '<h4>Preencha todos os campos.</h4>';
+    } else {
+
+      require_once 'classes/pedido.php';
+      $pedido = new Pedido($pdo, $nome_cliente, $produtos, $valorTotal);
+      $pedido->criarPedido();
+  }
+  }
+  ?>
+
   <section class="page-novo-pedido paddingBottom50">
     <div class="container">
       <div>
@@ -98,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" class="input-produto" name="produto[nome][]" placeholder="Digite o nome do produto">
+              <td><input type="text" class="input-produto" name="produto[nome][]" placeholder="Digite o nome do produto" autocomplete="off">
               <div class="produto-dropdown dropdown"></div></td>
               <td><input type="number" class="input" name="produto[quantidade][]" value="1"></td>
               <td><input type="text" class="input" name="valorParcial[]" readonly></td>
@@ -156,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   function adicionarLinha() {
     $("#tabela-pedidos tbody").append(
         "<tr>" +
-        "<td><input type='text' class='input-produto' name='produto[nome][]' placeholder='Digite o nome do produto'>" +
+        "<td><input type='text' class='input-produto' name='produto[nome][]' placeholder='Digite o nome do produto' autocomplete='off'>" +
         "<div class='produto-dropdown dropdown'></div></td>" +
         "<td><input type='number' class='input' name='produto[quantidade][]' value='1'></td>" +
         "<td><input type='text' class='input' name='valorParcial[]' readonly></td>" +

@@ -16,9 +16,8 @@ class Pedido {
 
         if (!$this->id_cliente) {
             throw new Exception("Cliente não encontrado: $nome_cliente");
-            }
+        }
     }
-    
 
     private function buscarIdCliente($nome_cliente) {
         try {
@@ -38,38 +37,66 @@ class Pedido {
     public function criarPedido() {
         try {
             $this->pdo->beginTransaction();
-    
+
+            // Verifica a disponibilidade no estoque antes de criar o pedido
+            foreach (array_keys($this->produtos['nome']) as $index) {
+                $nome = $this->produtos['nome'][$index];
+                $quantidade = $this->produtos['quantidade'][$index];
+
+                if (!empty($nome) && !empty($quantidade)) {
+                    $this->verificarEstoque($nome, $quantidade); // Verifica a quantidade no estoque
+                } else {
+                    throw new Exception("Dados inválidos para produto: Nome = $nome, Quantidade = $quantidade");
+                }
+            }
+
             // Insere o pedido
             $sql_pedido = "INSERT INTO pedido (id_cliente, valor_total) VALUES (:id_cliente, :valor_total)";
             $stmt = $this->pdo->prepare($sql_pedido);
             $stmt->bindValue(":id_cliente", $this->id_cliente, PDO::PARAM_INT);
             $stmt->bindValue(":valor_total", $this->valorTotal, PDO::PARAM_STR);
             $stmt->execute();
-    
+
             $id_pedido = $this->pdo->lastInsertId();
-    
-            // Insere os produtos
+
+            // Insere os produtos e atualiza o estoque
             foreach (array_keys($this->produtos['nome']) as $index) {
                 $nome = $this->produtos['nome'][$index];
                 $quantidade = $this->produtos['quantidade'][$index];
-                
-                // Verifica se os dados estão corretos antes de inserir
+
                 if (!empty($nome) && !empty($quantidade)) {
                     $this->inserirProduto($id_pedido, $nome, $quantidade);
-                } else {
-                    throw new Exception("Dados inválidos para produto: Nome = $nome, Quantidade = $quantidade");
+                    $this->atualizarEstoque($nome, $quantidade); // Atualiza o estoque após inserir o produto no pedido
                 }
             }
-    
+
             $this->pdo->commit();
+            // Salva o ID do pedido na sessão
+            $_SESSION['id_pedido'] = $id_pedido;
+        
             header('location: /projeto-capacitacao-tecnologia-main/pedido-cadastrado-sucesso.php');
-            // echo "Pedido criado com sucesso! ID do Pedido: " . $id_pedido;
-        } catch (PDOException $e) {
+            xit;
+            } catch (PDOException $e) {
             $this->pdo->rollBack();
-            echo "Erro ao criar o pedido: " . $e->getMessage();
-        } catch (Exception $e) {
+            echo "<h4>Erro ao criar o pedido: " . $e->getMessage() . "</h4>";
+            } catch (Exception $e) {
             $this->pdo->rollBack();
-            echo "Erro ao processar o pedido: " . $e->getMessage();
+            echo "<h4>Erro ao processar o pedido: " . $e->getMessage() . "</h4>";
+    }
+    }
+
+    private function verificarEstoque($nome_produto, $quantidade_pedido) {
+        $sql = "SELECT quantidade FROM produto WHERE nome = :nome_produto";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":nome_produto", $nome_produto, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $quantidade_estoque = $stmt->fetchColumn();
+
+        if ($quantidade_estoque === false) {
+            throw new Exception("Produto não encontrado no estoque: $nome_produto");
+        } elseif ($quantidade_estoque < $quantidade_pedido) {
+            throw new Exception("Estoque insuficiente para o produto: $nome_produto. Quantidade disponível: $quantidade_estoque, Quantidade solicitada: $quantidade_pedido");
         }
     }
 
@@ -95,5 +122,13 @@ class Pedido {
         } else {
             throw new Exception("Produto não encontrado: $nome_produto");
         }
+    }
+
+    private function atualizarEstoque($nome_produto, $quantidade) {
+        $sql = "UPDATE produto SET quantidade = quantidade - :quantidade WHERE nome = :nome_produto";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":quantidade", $quantidade, PDO::PARAM_INT);
+        $stmt->bindValue(":nome_produto", $nome_produto, PDO::PARAM_STR);
+        $stmt->execute();
     }
 }
