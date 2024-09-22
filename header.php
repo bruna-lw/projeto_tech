@@ -1,9 +1,11 @@
+<script src="controller/user-image.js"></script>
+
 <div class="container">
       <a href="dashboard.php" class="logo">
         <img src="assets/images/ho.svg" alt="" />
       </a>
       <div class="blc-user">
-        <img src="assets/images/icon-feather-user.svg" alt="" />
+        <img id="userImage" src="assets/images/icon-feather-user.svg" alt="Imagem do usuário" style="max-width: 40px; height: 40px;" />
         <span>
           Olá, <br />
           <?php if (isset($_SESSION['user_name'])): ?>
