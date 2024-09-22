@@ -11,7 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dados atualizados com sucesso!</title>
+  <title>Pedido criado</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="./assets/css/styles2.css">
@@ -35,7 +35,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
       </div>
     </div>
-    <h4>Dados atualizados com sucesso!</h4>
+    <h4>Pedido criado com sucesso!</h4>
   </section>
 </body>
 

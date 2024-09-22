@@ -87,6 +87,7 @@ function calcularValorTotalComDesconto() {
     const valorComDesconto = valorSubtotal - desconto;
 
     // Atualizar o campo valor total com desconto
+    $('#valor-total-hidden').val(valorComDesconto.toFixed(2));
     $('#valor-total').val(valorComDesconto.toFixed(2));
 }
 

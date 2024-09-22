@@ -3,7 +3,35 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-?>
+
+$dsn = "mysql:dbname=projeto;host=localhost";
+$user = "root";
+$password = "";
+
+try {
+    $pdo = new PDO($dsn, $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Erro com o banco de dados: " . $e->getMessage();
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $nome_cliente = filter_input(INPUT_POST, 'nome-cliente', FILTER_SANITIZE_STRING);
+  $produtos = $_POST['produto']; // Captura o array de produtos
+  $valorTotal = filter_input(INPUT_POST, 'valor-total-pedido', FILTER_SANITIZE_STRING);
+
+  // Checa se todos os campos estão preenchidos
+  if (empty($nome_cliente) || empty($produtos) || empty($valorTotal)) {
+      echo '<h4>Preencha todos os campos.</h4>';
+  } else {
+
+      require_once 'classes/pedido.php';
+      $pedido = new Pedido($pdo, $nome_cliente, $produtos, $valorTotal);
+      $pedido->criarPedido();
+  }
+}
+  ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -52,9 +80,10 @@ if (session_status() === PHP_SESSION_NONE) {
           <span>Novo pedido</span>
         </a>
       </div>
+      <form id="pedido-form" method="POST">
       <div class="maxW340">
         <label class="input-label">Cliente</label>
-        <input type="text" class="input" id="input-cliente" placeholder="Digite o nome do cliente" autocomplete="off">
+        <input type="text" class="input" id="input-cliente" name="nome-cliente" placeholder="Digite o nome do cliente" autocomplete="off">
         <div id="cliente-dropdown" class="dropdown"></div>
       </div>
       <div class="shadow-table">
@@ -69,9 +98,9 @@ if (session_status() === PHP_SESSION_NONE) {
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" class="input-produto" name="produto[]" placeholder="Digite o nome do produto">
+              <td><input type="text" class="input-produto" name="produto[nome][]" placeholder="Digite o nome do produto">
               <div class="produto-dropdown dropdown"></div></td>
-              <td><input type="number" class="input" name="quantidade[]" value="1"></td>
+              <td><input type="number" class="input" name="produto[quantidade][]" value="1"></td>
               <td><input type="text" class="input" name="valorParcial[]" readonly></td>
               <td><a href="#" class="bt-remover"><img src="assets/images/remover.svg" alt="" /></a></td>
             </tr>
@@ -97,7 +126,8 @@ if (session_status() === PHP_SESSION_NONE) {
                     </div>
                     <div class="d-flex align-items-center">
                       <span>Total</span>
-                      <input type="text" class="input" id="valor-total" disabled value="" />
+                      <input type="hidden" class="input" id="valor-total-hidden" name="valor-total-pedido" value="" />
+                      <input type="number" class="input" id="valor-total" disabled value="" />
                     </div>
                   </div>
                 </div>
@@ -113,6 +143,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <div class="maxW340">
         <button type="submit" class="button-default">Salvar</button>
       </div>
+      </form>
     </div>
   </section>
 
@@ -125,9 +156,9 @@ if (session_status() === PHP_SESSION_NONE) {
   function adicionarLinha() {
     $("#tabela-pedidos tbody").append(
         "<tr>" +
-        "<td><input type='text' class='input-produto' name='produto[]' placeholder='Digite o nome do produto'>" +
+        "<td><input type='text' class='input-produto' name='produto[nome][]' placeholder='Digite o nome do produto'>" +
         "<div class='produto-dropdown dropdown'></div></td>" +
-        "<td><input type='number' class='input' name='quantidade[]' value='1'></td>" +
+        "<td><input type='number' class='input' name='produto[quantidade][]' value='1'></td>" +
         "<td><input type='text' class='input' name='valorParcial[]' readonly></td>" +
         "<td><a href='#' class='bt-remover'><img src='assets/images/remover.svg' alt='' /></a></td>" +
         "</tr>"

@@ -4,6 +4,22 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$dsn = "mysql:dbname=projeto;host=localhost";
+$user = "root";
+$password = "";
+
+try {
+    $pdo = new PDO($dsn, $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Erro com o banco de dados: " . $e->getMessage();
+    exit;
+}
+
+$cmd = $pdo->query("SELECT COUNT(*) as total FROM pedido");
+$res = $cmd->fetch(PDO::FETCH_ASSOC);
+$totalPedidos = $res['total']; // retorna o número de pedidos
+
 require_once 'classes/cliente.php';
 // Criação de uma instância da classe Cliente
 $cliente = new Cliente("projeto", "localhost", "root", "");
@@ -62,7 +78,7 @@ $totalProdutos = $produto->contarProdutos();
           <div class="d-flex justify-content-between">
             <div>
               <h2>Pedidos</h2>
-              <span>444</span>
+              <?php echo "<span>".$totalPedidos."</span>"; ?>
             </div>
             <img src="assets/images/icon-pedido.svg" alt="">
           </div>

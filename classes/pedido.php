@@ -1,141 +1,99 @@
 <?php
 
 class Pedido {
-    private $id_pedido;
+    private $pdo;
     private $id_cliente;
-    private $produtos = []; // Armazena os produtos e quantidades do pedido
-    private $valor_total = 0;
-    private $pdo; // Conexão com o banco de dados
+    private $produtos = []; // Produtos e suas quantidades
+    private $valorTotal;
 
-    public function __construct($dbname, $host, $user, $senha) {
-        try {
-            $this->pdo = new PDO("mysql:dbname=".$dbname.";host=".$host, $user, $senha);
-        } catch (PDOException $e) {
-            echo "Erro com banco de dados: ".$e->getMessage();
-            exit();
-        } catch (Exception $e) {
-            echo "Erro genérico: ".$e->getMessage();
-        }
-    }
-
-    // Construtor - Recebe a conexão PDO e os dados do pedido
-    public function __construct($pdo, $id_cliente, $produtos) {
+    public function __construct($pdo, $nome_cliente, $produtos, $valorTotal) {
         $this->pdo = $pdo;
-        $this->id_cliente = $id_cliente;
         $this->produtos = $produtos;
-        $this->criarPedido(); // Cria o pedido automaticamente ao instanciar
+        $this->valorTotal = $valorTotal;
+
+        // Buscar ID do cliente
+        $this->id_cliente = $this->buscarIdCliente($nome_cliente);
+
+        if (!$this->id_cliente) {
+            throw new Exception("Cliente não encontrado: $nome_cliente");
+            }
     }
+    
 
-    // Cria o pedido na tabela 'pedido' e insere os produtos na tabela 'produtos_pedido'
-    private function criarPedido() {
+    private function buscarIdCliente($nome_cliente) {
         try {
-            // Iniciar uma transação
-            $this->pdo->beginTransaction();
-
-            // Inserir o pedido na tabela 'pedido'
-            $sql_pedido = "INSERT INTO pedido (id_cliente) VALUES (:id_cliente)";
-            $stmt = $this->pdo->prepare($sql_pedido);
-            $stmt->bindValue(":id_cliente", $this->id_cliente, PDO::PARAM_INT);
+            $sql = "SELECT id_cliente FROM cliente WHERE nome = :nome_cliente LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(":nome_cliente", $nome_cliente, PDO::PARAM_STR);
             $stmt->execute();
 
-            // Obtém o ID do pedido recém-criado
-            $this->id_pedido = $this->pdo->lastInsertId();
-
-            // Iterar pelos produtos e inseri-los na tabela 'produtos_pedido'
-            foreach ($this->produtos as $produto) {
-                $this->adicionarProdutoAoPedido($produto['id_produto'], $produto['quantidade']);
-            }
-
-            // Atualizar o valor total do pedido na tabela 'pedido'
-            $this->atualizarValorTotal();
-
-            // Confirmar a transação
-            $this->pdo->commit();
-
-            echo "Pedido criado com sucesso! ID do Pedido: " . $this->id_pedido;
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $resultado ? $resultado['id_cliente'] : null;
         } catch (PDOException $e) {
-            // Reverter a transação em caso de erro
+            echo "Erro ao buscar cliente: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function criarPedido() {
+        try {
+            $this->pdo->beginTransaction();
+    
+            // Insere o pedido
+            $sql_pedido = "INSERT INTO pedido (id_cliente, valor_total) VALUES (:id_cliente, :valor_total)";
+            $stmt = $this->pdo->prepare($sql_pedido);
+            $stmt->bindValue(":id_cliente", $this->id_cliente, PDO::PARAM_INT);
+            $stmt->bindValue(":valor_total", $this->valorTotal, PDO::PARAM_STR);
+            $stmt->execute();
+    
+            $id_pedido = $this->pdo->lastInsertId();
+    
+            // Insere os produtos
+            foreach (array_keys($this->produtos['nome']) as $index) {
+                $nome = $this->produtos['nome'][$index];
+                $quantidade = $this->produtos['quantidade'][$index];
+                
+                // Verifica se os dados estão corretos antes de inserir
+                if (!empty($nome) && !empty($quantidade)) {
+                    $this->inserirProduto($id_pedido, $nome, $quantidade);
+                } else {
+                    throw new Exception("Dados inválidos para produto: Nome = $nome, Quantidade = $quantidade");
+                }
+            }
+    
+            $this->pdo->commit();
+            header('location: /projeto-capacitacao-tecnologia-main/pedido-cadastrado-sucesso.php');
+            // echo "Pedido criado com sucesso! ID do Pedido: " . $id_pedido;
+        } catch (PDOException $e) {
             $this->pdo->rollBack();
             echo "Erro ao criar o pedido: " . $e->getMessage();
-        }
-    }
-
-    // Adiciona um produto ao pedido na tabela 'produtos_pedido'
-    private function adicionarProdutoAoPedido($id_produto, $quantidade) {
-        try {
-            // Buscar o valor unitário do produto na tabela 'produto'
-            $sql_produto = "SELECT valor FROM produto WHERE id_produto = :id_produto";
-            $stmt_produto = $this->pdo->prepare($sql_produto);
-            $stmt_produto->bindValue(":id_produto", $id_produto, PDO::PARAM_INT);
-            $stmt_produto->execute();
-
-            $produto_data = $stmt_produto->fetch(PDO::FETCH_ASSOC);
-            if ($produto_data) {
-                $valor_unitario = $produto_data['valor'];
-
-                // Calcular o valor parcial (quantidade * valor_unitario)
-                $valor_parcial = $quantidade * $valor_unitario;
-
-                // Inserir na tabela 'produtos_pedido'
-                $sql_inserir_produto = "INSERT INTO produtos_pedido (id_pedido, id_produto, quantidade, valor_unitario, valor_parcial) 
-                                        VALUES (:id_pedido, :id_produto, :quantidade, :valor_unitario, :valor_parcial)";
-                $stmt_inserir_produto = $this->pdo->prepare($sql_inserir_produto);
-                $stmt_inserir_produto->bindValue(":id_pedido", $this->id_pedido, PDO::PARAM_INT);
-                $stmt_inserir_produto->bindValue(":id_produto", $id_produto, PDO::PARAM_INT);
-                $stmt_inserir_produto->bindValue(":quantidade", $quantidade, PDO::PARAM_INT);
-                $stmt_inserir_produto->bindValue(":valor_unitario", $valor_unitario, PDO::PARAM_STR);
-                $stmt_inserir_produto->bindValue(":valor_parcial", $valor_parcial, PDO::PARAM_STR);
-                $stmt_inserir_produto->execute();
-
-                // Atualizar o valor total do pedido na memória
-                $this->valor_total += $valor_parcial;
-            } else {
-                throw new Exception("Produto não encontrado. ID do Produto: $id_produto");
-            }
-        } catch (PDOException $e) {
-            echo "Erro ao adicionar produto ao pedido: " . $e->getMessage();
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $this->pdo->rollBack();
+            echo "Erro ao processar o pedido: " . $e->getMessage();
         }
     }
 
-    // Atualiza o valor total do pedido na tabela 'pedido'
-    private function atualizarValorTotal() {
-        try {
-            $sql_update = "UPDATE pedido SET valor_total = :valor_total WHERE id_pedido = :id_pedido";
-            $stmt_update = $this->pdo->prepare($sql_update);
-            $stmt_update->bindValue(":valor_total", $this->valor_total, PDO::PARAM_STR);
-            $stmt_update->bindValue(":id_pedido", $this->id_pedido, PDO::PARAM_INT);
-            $stmt_update->execute();
-        } catch (PDOException $e) {
-            echo "Erro ao atualizar o valor total do pedido: " . $e->getMessage();
+    private function obterIdProduto($nome_produto) {
+        $sql = "SELECT id_produto FROM produto WHERE nome = :nome_produto";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":nome_produto", $nome_produto, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        return $stmt->fetchColumn();
+    }
+
+    private function inserirProduto($id_pedido, $nome_produto, $quantidade) {
+        $id_produto = $this->obterIdProduto($nome_produto);
+
+        if ($id_produto) {
+            $sql_inserir = "INSERT INTO produtos_pedido (id_pedido, id_produto, quantidade) VALUES (:id_pedido, :id_produto, :quantidade)";
+            $stmt_inserir = $this->pdo->prepare($sql_inserir);
+            $stmt_inserir->bindValue(":id_pedido", $id_pedido, PDO::PARAM_INT);
+            $stmt_inserir->bindValue(":id_produto", $id_produto, PDO::PARAM_INT);
+            $stmt_inserir->bindValue(":quantidade", $quantidade, PDO::PARAM_INT);
+            $stmt_inserir->execute();
+        } else {
+            throw new Exception("Produto não encontrado: $nome_produto");
         }
     }
 }
-
-// // Exemplo de uso:
-
-// // Conexão com o banco de dados usando PDO
-// $dsn = "mysql:dbname=sistema_pedidos;host=localhost";
-// $user = "seu_usuario";
-// $password = "sua_senha";
-
-// try {
-//     $pdo = new PDO($dsn, $user, $password);
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-//     // Dados de exemplo para criar um pedido
-//     $id_cliente = 1; // ID do cliente
-//     $produtos = [
-//         ['id_produto' => 1, 'quantidade' => 2], // Produto A
-//         ['id_produto' => 2, 'quantidade' => 1]  // Produto B
-//     ];
-
-//     // Criar um novo pedido
-//     $pedido = new Pedido($pdo, $id_cliente, $produtos);
-
-// } catch (PDOException $e) {
-//     echo "Erro com o banco de dados: " . $e->getMessage();
-// }
-
-// ?>
