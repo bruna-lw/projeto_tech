@@ -19,10 +19,11 @@
           <a href="clientes.php">Gerenciar clientes</a>
           <a href="produtos.php">Gerenciar produtos</a>
           <a href="estoques.php">Relatório de estoque</a>
+          <a href="vendas.php">Relatório de vendas</a>
           <a href="cadastro-cliente.php">Cadastrar cliente</a>
           <!-- <a href="cadastro-usuario.php">Cadastrar usuário</a> -->
           <a href="cadastro-produto.php">Cadastrar produto</a>
-          <a href="pedidos.php">Novo pedido</a>
+          <a href="novo-pedido.php">Novo pedido</a>
           <a href="minha-conta.php">Minha conta</a>
           <a href="controller/logout.php">Sair da conta</a>
         </div>

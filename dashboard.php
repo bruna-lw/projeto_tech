@@ -4,17 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$dsn = "mysql:dbname=projeto;host=localhost";
-$user = "root";
-$password = "";
-
-try {
-    $pdo = new PDO($dsn, $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Erro com o banco de dados: " . $e->getMessage();
-    exit;
-}
+require 'controller/conecta-servidor.php';
 
 $cmd = $pdo->query("SELECT COUNT(*) as total FROM pedido");
 $res = $cmd->fetch(PDO::FETCH_ASSOC);
@@ -82,7 +72,7 @@ $totalProdutos = $produto->contarProdutos();
             </div>
             <img src="assets/images/icon-pedido.svg" alt="">
           </div>
-          <a href="pedidos.php" class="bt-index">Novo pedido</a>
+          <a href="novo-pedido.php" class="bt-index">Novo pedido</a>
         </div>
       </div>
     </div>

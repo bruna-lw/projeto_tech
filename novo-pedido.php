@@ -4,9 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$dsn = "mysql:dbname=projeto;host=localhost";
-$user = "root";
-$password = "";
+require 'controller/conecta-servidor.php';
+
   ?>
 
 <!DOCTYPE html>
@@ -51,14 +50,7 @@ $password = "";
   </header>
 
   <?php
-  try {
-    $pdo = new PDO($dsn, $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    echo "Erro com o banco de dados: " . $e->getMessage();
-    exit;
-  }
-
+  
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome_cliente = filter_input(INPUT_POST, 'nome-cliente', FILTER_SANITIZE_STRING);
     $produtos = $_POST['produto']; // Captura o array de produtos
