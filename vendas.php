@@ -18,7 +18,7 @@ require 'controller/fetch-pedidos.php'
   <title>Relatório de Vendas</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
-  <link rel="stylesheet" href="./assets/css/gerenciamento_produto.css">
+  <link rel="stylesheet" href="./assets/css/vendas.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
   <link rel="stylesheet" href="./assets/css/styles2.css">
 </head>
@@ -38,12 +38,18 @@ require 'controller/fetch-pedidos.php'
         </a>
         <!-- <a href="cadastro-produto.php" class="bt-add">Adicionar novo produto</a> -->
       </div>
-      <div>
-        <form method="GET" action="">
-          <label for="data_inicio">Data Início:</label>
-          <input type="date" id="data_inicio" name="data_inicio" required>
-          <label for="data_fim">Data Fim:</label>
-          <input type="date" id="data_fim" name="data_fim" required>
+      <div class="filtro-data">
+        <form class="filtro" method="GET" action="">
+          <div class="input-group">
+            <div class="input-item">
+              <label for="data_inicio">Data Início:</label>
+              <input type="date" id="data_inicio" name="data_inicio" required>
+            </div>
+            <div class="input-item">
+              <label for="data_fim">Data Fim:</label>
+              <input type="date" id="data_fim" name="data_fim" required>
+            </div>
+          </div>
           <button type="submit">Filtrar</button>
         </form>
       </div>

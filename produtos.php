@@ -20,6 +20,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
   <link rel="stylesheet" href="./assets/css/gerenciamento_produto.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
   <link rel="stylesheet" href="./assets/css/styles2.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -37,6 +38,12 @@ $produto = new Produto("projeto", "localhost", "root", "");
         </a>
         <a href="cadastro-produto.php" class="bt-add">Adicionar novo produto</a>
       </div>
+      <div class="search-container">
+        <label for="">Buscar produto:</label>
+        <input type="text" id="produto-input" placeholder="Digite o nome do produto" list="produto-list" autocomplete="off">
+        <datalist id="produto-list"></datalist>
+      </div>
+      <script src="controller/busca_produto.js"></script>
       <div class="shadow-table">
         <table>
           <thead>

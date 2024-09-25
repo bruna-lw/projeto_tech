@@ -38,7 +38,7 @@ $sql = "SELECT
         pedido.id_pedido AS id_pedido,
         pedido.data_pedido, 
         cliente.nome AS nome_cliente, 
-        GROUP_CONCAT(CONCAT(produtos_pedido.quantidade, ' un. de ', produto.nome) SEPARATOR '<br>') AS produtos,
+        GROUP_CONCAT(CONCAT(produtos_pedido.quantidade, ' unidade(s) - ', produto.nome) SEPARATOR ', <br>') AS produtos,
         pedido.valor_total
       FROM 
         pedido

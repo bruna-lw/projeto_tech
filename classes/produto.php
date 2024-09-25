@@ -60,7 +60,7 @@ class Produto {
         $cmd->execute();
     }
 
-    // Buscar os dados de um produto específico
+    // Buscar os dados de um produto específico pelo id
     public function buscarDadosProduto($id){
         $res = array();
         $cmd = $this->pdo->prepare("SELECT * FROM produto WHERE id_produto = :id");

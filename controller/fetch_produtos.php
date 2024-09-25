@@ -15,9 +15,16 @@ try {
         $query = $_GET['query'];
         
         // Preparar e executar a consulta SQL para buscar produtos com base na consulta
-        $stmt = $pdo->prepare("SELECT id_produto, nome, valor FROM produto WHERE nome LIKE :query ORDER BY nome");
+        $stmt = $pdo->prepare("SELECT id_produto, nome, sku, descricao, valor, imagem FROM produto WHERE nome LIKE :query ORDER BY nome");
         $stmt->execute([':query' => '%' . $query . '%']);
         $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Converter a imagem para base64
+        foreach ($produtos as &$produto) {
+            if (!empty($produto['imagem'])) {
+                $produto['imagem'] = base64_encode($produto['imagem']);
+            }
+        }
 
         echo json_encode($produtos); // Certifique-se de que apenas JSON é retornado
     } else {
