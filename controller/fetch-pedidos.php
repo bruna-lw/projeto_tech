@@ -73,25 +73,4 @@ $stmt->execute();
 $dadosPedido = array();
 $dadosPedido = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// // Verifica se existem resultados
-// if ($stmt->rowCount() > 0) {
-//   // Array para armazenar os dados dos pedidos
-//   $dadosPedido = array();
-
-//   // Itera sobre os resultados e formata os dados
-//   while($linha = $stmt->fetch(PDO::FETCH_ASSOC)) {
-//       // Formatando a data para dd/mm/aaaa
-//       $dataPedido = new DateTime($linha['data_pedido']);
-//       $dataFormatada = $dataPedido->format('d/m/Y');
-
-//       // Armazenar os dados do pedido
-//       $dadosPedido[] = array(
-//           'id_pedido' => $linha['id_pedido'],
-//           'data_pedido' => $dataFormatada,
-//           'nome_cliente' => $linha['nome_cliente'],
-//           'produtos' => $linha['produtos'],
-//           'valor_total' => $linha['valor_total']
-//       );
-//   }
-// }
 ?>

@@ -15,7 +15,7 @@ try {
         $query = $_GET['query'];
         
         // Preparar e executar a consulta SQL para buscar produtos com base na consulta
-        $stmt = $pdo->prepare("SELECT id_produto, nome, sku, descricao, valor, imagem FROM produto WHERE nome LIKE :query ORDER BY nome");
+        $stmt = $pdo->prepare("SELECT * FROM produto WHERE nome LIKE :query ORDER BY nome");
         $stmt->execute([':query' => '%' . $query . '%']);
         $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

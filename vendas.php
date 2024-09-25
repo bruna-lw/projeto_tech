@@ -60,7 +60,6 @@ require 'controller/fetch-pedidos.php'
               <th>ID pedido</th>
               <th>Data</th>
               <th>Cliente</th>
-              <!-- <th>Descrição</th> -->
               <th>Produtos</th>
               <th>Valor total</th>
             </tr>

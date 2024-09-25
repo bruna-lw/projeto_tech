@@ -14,3 +14,13 @@
 .page-gerenciamento-produto table tr td:last-child {
     width: 140px;
 }
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#produto-input {
+    width: 300px;
+}
+

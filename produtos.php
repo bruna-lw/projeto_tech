@@ -40,7 +40,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
       </div>
       <div class="search-container">
         <label for="">Buscar produto:</label>
-        <input type="text" id="produto-input" placeholder="Digite o nome do produto" list="produto-list" autocomplete="off">
+        <input type="text" id="produto-input" placeholder="Digite o nome do produto" list="produto-list" autocomplete="off" style="margin: 10px 0; width: 200px; height: 20px;">
         <datalist id="produto-list"></datalist>
       </div>
       <script src="controller/busca_produto.js"></script>

@@ -14,7 +14,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciamento de estoque</title>
+  <title>Relatório de estoque</title>
   <link rel="stylesheet" href="./assets/css/reset.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="./assets/css/gerenciamento_produto.css">
@@ -33,20 +33,22 @@ $produto = new Produto("projeto", "localhost", "root", "");
       <div class="d-flex justify-content-between">
         <a href="dashboard.php" class="link-voltar">
           <img src="assets/images/arrow.svg" alt="">
-          <span>Estoque de produto</span>
+          <span>Relatório de estoque</span>
         </a>
-        <!-- <a href="cadastro-produto.php" class="bt-add">Adicionar novo produto</a> -->
       </div>
+      <div class="search-container">
+        <label for="">Buscar produto:</label>
+        <input type="text" id="produto-input" placeholder="Digite o nome do produto" list="produto-list" autocomplete="off" style="margin: 10px 0; width: 200px; height: 20px;">
+        <datalist id="produto-list"></datalist>
+      </div>
+      <script src="controller/busca_estoque.js"></script>
       <div class="shadow-table">
         <table>
           <thead>
             <tr>
               <th>ID</th>
-              <!-- <th>Imagem</th> -->
               <th>Nome</th>
               <th>SKU</th>
-              <!-- <th>Descrição</th> -->
-              <!-- <th>Valor</th> -->
               <th>Estoque (un)</th>
               <th></th>
             </tr>
