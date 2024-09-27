@@ -1,3 +1,14 @@
+<?php
+session_start(); // Iniciar a sessão
+
+if (isset($_POST['email'])) {
+    $_SESSION['email'] = $_POST['email']; // Armazena o email na sessão
+    // Redirecionar para a página de redefinição de senha
+    header('Location: redefinir-senha.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -23,32 +34,23 @@
       <div>
         <img src="assets/images/logoinpsun.png" alt="">
         <p class="login-title">
-          Login
+          Login - Recuperar senha
         </p>
         <p class="login-text">
-          <!-- Caso seja admin, entre com o seu login de cliente da <a href="https://essentia.com.br/"
-            target="_blank">Essentia Pharma.</a> -->
+          </a>
         </p>
       </div>
-      <div class="login-container-small">
-        <form action="./controller/verifica-login.php" method="post" id="form-input-login">
+      <div class="login container-small">
+        <form action="controller/verificar-pergunta.php" method="POST" id="form-input-login">
           <div class="input-login">
             <div>
-              <label class="input-label-login">E-mail</label>
-              <input type="text" class="email-input" id="data-login" name="email">
-              <small id="textEmail"></small>
-            </div>
-            <div>
-              <label class="input-label-password">Senha</label>
-              <input type="password" class="password-input" id="data-password" name="senha">
-              <small id="textPassword"></small>
+              <label class="input-label-login">Digite seu email</label>
+              <input type="email" class="email-input" name="email" required>
             </div>
           </div>
           <button type="submit" class="button-default">Continuar</button>
         </form>
         </a>
-        </br><a href="cadastro-usuario.php">Ainda não é cadastrado? Clique aqui!</a></br></br>
-        <a href="recuperar-senha.php">Esqueceu a senha? Clique aqui!</a>
       </div>
     </div>
   </section>

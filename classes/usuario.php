@@ -7,6 +7,8 @@ class Usuario {
     protected $telefone;
     protected $senha;
     protected $imagem;
+    protected $pergunta;
+    protected $resposta;
     private $pdo;
 
     public function __construct($dbname, $host, $user, $senha) {
@@ -22,7 +24,7 @@ class Usuario {
 
 
     // Função para cadastrar usuario no BD
-    public function cadastrarUsuario ($nome, $email, $cpf, $telefone, $senha){
+    public function cadastrarUsuario ($nome, $email, $cpf, $telefone, $senha, $pergunta, $resposta){
         // antes de cadastrar, vamos verificar se já possui email cadastrado
         $cmd = $this->pdo->prepare("SELECT id_usuario FROM usuario WHERE email = :e");
         $cmd->bindValue(":e", $email);
@@ -33,12 +35,14 @@ class Usuario {
             // Criptografia da senha usando sha1
             $senhaCriptografada = sha1($senha);
 
-            $cmd = $this->pdo->prepare("INSERT INTO usuario (nome, email, cpf, telefone, senha) VALUES (:n, :e, :c, :t, :s)");
+            $cmd = $this->pdo->prepare("INSERT INTO usuario (nome, email, cpf, telefone, senha, pergunta, resposta_seguranca) VALUES (:n, :e, :c, :t, :s, :p, :r)");
             $cmd->bindValue(":n", $nome);
             $cmd->bindValue(":e", $email);
             $cmd->bindValue(":c", $cpf);
             $cmd->bindValue(":t", $telefone);
             $cmd->bindValue(":s", $senhaCriptografada);
+            $cmd->bindValue(":p", $pergunta);
+            $cmd->bindValue(":r", $resposta);
             $cmd->execute();
             return true;
          }

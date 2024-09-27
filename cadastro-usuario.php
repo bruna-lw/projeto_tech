@@ -46,9 +46,11 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
     $cpf = filter_input(INPUT_POST, 'cpf', FILTER_SANITIZE_STRING);
     $telefone = filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
+    $pergunta = filter_input(INPUT_POST, 'pergunta', FILTER_SANITIZE_STRING);
+    $resposta = filter_input(INPUT_POST, 'resposta', FILTER_SANITIZE_STRING);
 
     if (!empty($nome) && !empty($email) && !empty($senha)) {
-      if (!$usuario->cadastrarUsuario($nome, $email, $cpf, $telefone, $senha)) {
+      if (!$usuario->cadastrarUsuario($nome, $email, $cpf, $telefone, $senha, $pergunta ,$resposta)) {
         echo '<h4>Email já está cadastrado.</h4>';
       } else {
         header("location: novo-usuario-cadastrado.php");
@@ -91,6 +93,16 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
             <div>
               <label class="input-label">Senha</label>
               <input type="password" class="senha-input" name="senha">
+            </div>
+            <div>
+              <label for="pergunta" style="margin: 5px o,">Escolha uma pergunta de segurança:</label>
+              <select name="pergunta" required>
+              <option value="Qual o nome do seu pai?">Qual o nome do seu pai?</option>
+              <option value="Qual o nome do seu primeiro animal de estimação?">Qual o nome do seu primeiro animal de estimação?</option>
+              <option value="Em que cidade você nasceu?">Em que cidade você nasceu?</option>
+              </select>
+              <label for="resposta">Resposta:</label>
+              <input type="text" name="resposta" required>
             </div>
           </div>
           <button type="submit" class="button-default">Salvar novo usuário</button>
