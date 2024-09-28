@@ -35,7 +35,17 @@ require 'conecta-servidor.php';
   
       // Verificar se as senhas coincidem
       if ($_POST['password'] !== $confirmar_senha) {
-        echo "<h4>As senhas não coincidem!</h4>";
+        echo "<section class='page-cadastro-cliente paddingBottom50'>
+                <div class='container'>
+                  <div>
+                    <a href='/projeto-capacitacao-tecnologia-main/controller/redefinir-senha.php' class='link-voltar'>
+                      <img src='/projeto-capacitacao-tecnologia-main/assets/images/arrow.svg' alt=''>
+                      <span>Voltar</span>
+                    </a>
+                  </div>
+                </div>
+                <h4>As senhas não coincidem!</h4>
+              </section>";
         exit;
       }
   

@@ -1,8 +1,7 @@
 <?php
 session_start(); // Iniciar a sessão
-$_SESSION['email'] = $_POST['email'];
-
 require 'conecta-servidor.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -36,34 +35,32 @@ require 'conecta-servidor.php';
       </div>
       <div class="login-container-small">
         <?php
-          if (isset($_POST['email'])) {
+          if (isset($_POST['email']) && isset($_POST['resposta'])) {
             $email = $_POST['email'];
+            $resposta = $_POST['resposta'];
         
-            // Verificar se o e-mail existe no banco
-            $sql = "SELECT pergunta FROM usuario WHERE email = :e";
+            // Verificar se a resposta da pergunta está correta
+            $sql = "SELECT resposta_seguranca FROM usuario WHERE email = :e";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':e', $email);
             $stmt->execute();
             $user = $stmt->fetch();
         
-            if ($user) {
-                // Mostrar a pergunta de segurança
-                echo '<form action="/projeto-capacitacao-tecnologia-main/controller/verificar-resposta.php" method="post">
-                        <input type="hidden" name="email" value="'.$email.'">
-                        <label>'.$user['pergunta'].'</label>
-                        <input type="text" name="resposta" required>
-                        <button type="submit" class="button-default">Confirmar Resposta</button>
-                      </form>';
+            if ($user && $user['resposta_seguranca'] === $resposta) {
+                // Resposta correta, prosseguir para a redefinição de senha
+                $_SESSION['email'] = $email; // Armazenar o email na sessão para uso posterior
+                header('location: /projeto-capacitacao-tecnologia-main/controller/redefinir-senha.php');
             } else {
-                echo "E-mail não encontrado!
+                // Resposta incorreta, exibir mensagem de erro
+                echo "Resposta incorreta!
                       <div>
                         <a href='/projeto-capacitacao-tecnologia-main/recuperar-senha.php' class='link-voltar'>
                         <img src='/projeto-capacitacao-tecnologia-main/assets/images/arrow.svg' alt=''>
                         <span>Voltar</span>
                         </a>
                       </div>";
-              }
-          }
+            }
+        }
         ?>
         
       </div>

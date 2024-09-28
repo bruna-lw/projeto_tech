@@ -105,8 +105,10 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
               <input id="bt-foto" class="bt-arquivo" type="file" name="imagem">
             </div>
           </div>
-          <button type="submit" class="button-default">Atualizar dados</button>
-          <button type="submit" class="button-default" name="acao" value="excluir">Excluir minha conta</button>
+          <div id="edit-buttons-container" style="display: flex; gap: 50px;">
+            <button type="submit" class="button-default">Atualizar dados</button>
+            <button type="submit" class="button-default" name="acao" value="excluir">Excluir minha conta</button>
+          </div>
         </form>
       </div>
     </div>
