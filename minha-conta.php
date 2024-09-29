@@ -90,11 +90,11 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
             </div>
             <div>
               <label class="input-label">CPF</label>
-              <input type="text" class="cpf-input" name="cpf" value="<?php echo $dadosUsuario['cpf'] ?>">
+              <input type="text" class="cpf-input" id="cpf" name="cpf" value="<?php echo $dadosUsuario['cpf'] ?>" maxlength="14">
             </div>
             <div>
               <label class="input-label">Telefone</label>
-              <input type="tel" class="telefone-input" name="telefone" value="<?php echo $dadosUsuario['telefone'] ?>">
+              <input type="tel" class="telefone-input" id="telefone" name="telefone" value="<?php echo $dadosUsuario['telefone'] ?>" maxlength="15">
             </div>
             <div>
               <label class="input-label">Senha</label>
@@ -113,6 +113,7 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
       </div>
     </div>
   </section>
+<script src="controller/mascara.js"></script>
 </body>
 
 </html>

@@ -8,8 +8,9 @@
         <img id="userImage" src="assets/images/icon-feather-user.svg" alt="Imagem do usuário" style="max-width: 40px; height: 40px;" />
         <span>
           Olá, <br />
-          <?php if (isset($_SESSION['user_name'])): ?>
-            <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+          <?php if (isset($_SESSION['user_name'])):
+            $nomeCompleto = explode(' ', htmlspecialchars($_SESSION['user_name'])); //Quebra o nome em array de palavras separadas por espaço
+            echo $nomeCompleto[0]; ?>
           <?php else: ?>
             visitante
           <?php endif; ?>

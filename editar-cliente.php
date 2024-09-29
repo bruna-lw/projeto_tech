@@ -74,11 +74,11 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
             </div>
             <div>
               <label class="input-label">CPF</label>
-              <input type="text" class="cpf-input" name="cpf" value="<?php echo $dadosCliente['cpf'] ?>">
+              <input type="text" class="cpf-input" id="cpf" name="cpf" value="<?php echo $dadosCliente['cpf'] ?>" maxlength="14">
             </div>
             <div>
               <label class="input-label">Telefone</label>
-              <input type="tel" class="telefone-input" name="telefone" value="<?php echo $dadosCliente['telefone'] ?>">
+              <input type="tel" class="telefone-input" id="telefone" name="telefone" value="<?php echo $dadosCliente['telefone'] ?>" maxlength="15">
             </div>
           </div>
           <button type="submit" class="button-default">Atualizar dados do cliente</button>
@@ -86,6 +86,7 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
       </div>
     </div>
   </section>
+<script src="controller/mascara.js"></script>
 </body>
 
 </html>

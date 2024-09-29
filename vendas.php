@@ -57,11 +57,12 @@ require 'controller/fetch-pedidos.php'
         <table>
           <thead>
             <tr>
-              <th>ID pedido</th>
+              <th>ID</th>
               <th>Data</th>
               <th>Cliente</th>
               <th>Produtos</th>
-              <th>Valor total</th>
+              <th>Valor</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +76,10 @@ require 'controller/fetch-pedidos.php'
                   echo "<td>".$dado['nome_cliente']."</td>";
                   echo "<td>".$dado['produtos']."</td>";
                   echo "<td>".$dado['valor_total']."</td>";
+                  echo "<td>
+                          <span class='status-text'>".$dado['status']."</span>
+                          <a href='editar-status-pedido.php?id_up=".$dado['id_pedido']."' class='edit-button'>Editar</a>
+                        </td>";
                   echo "</tr>";
               }
               }

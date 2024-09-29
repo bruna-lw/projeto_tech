@@ -70,11 +70,11 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
             </div>
             <div>
               <label class="input-label">CPF</label>
-              <input type="text" class="cpf-input" name="cpf">
+              <input type="text" class="cpf-input" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
             </div>
             <div>
               <label class="input-label">Telefone</label>
-              <input type="tel" class="telefone-input" name="telefone">
+              <input type="tel" class="telefone-input" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15" required>
             </div>
           </div>
           <button type="submit" class="button-default">Cadastrar novo cliente</button>
@@ -82,6 +82,7 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
       </div>
     </div>
   </section>
+  <script src="controller/mascara.js"></script>
 </body>
 
 </html>
