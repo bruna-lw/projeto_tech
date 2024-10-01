@@ -95,14 +95,14 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
               <input type="password" class="senha-input" name="senha">
             </div>
             <div>
-              <label for="pergunta" style="margin: 5px o,">Escolha uma pergunta de segurança:</label>
-              <select name="pergunta" required>
+              <label for="pergunta" style="margin: 5px 0;">Escolha uma pergunta de segurança:</label>
+              <select name="pergunta" required style="border-radius: 4px; border: 1px solid #CCCCCC; height: 35px; margin: 10px 0;">
               <option value="Qual o nome do seu pai?">Qual o nome do seu pai?</option>
               <option value="Qual o nome do seu primeiro animal de estimação?">Qual o nome do seu primeiro animal de estimação?</option>
               <option value="Em que cidade você nasceu?">Em que cidade você nasceu?</option>
               </select>
-              <label for="resposta">Resposta:</label>
-              <input type="text" name="resposta" required>
+              <label for="resposta" style="margin: 0;">Resposta:</label>
+              <input type="text" name="resposta" required style="height: 35px;">
             </div>
           </div>
           <button type="submit" class="button-default">Salvar novo usuário</button>

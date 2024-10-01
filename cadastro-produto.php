@@ -37,11 +37,16 @@ $produto = new Produto("projeto", "localhost", "root", "");
     $valor = filter_input(INPUT_POST, 'valor');
     $descricao = filter_input(INPUT_POST, 'descricao', FILTER_SANITIZE_STRING);
 
+    // Verificar se existe uma imagem enviada via formulário
     if (isset($_FILES['imagem']['tmp_name']) && !empty($_FILES['imagem']['tmp_name'])) {
       $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
     } else {
-      // Mantem a imagem existente
-      $imagem = $dadosProduto['imagem'];
+      // Inicializar ou manter a imagem existente
+      if (isset($dadosProduto['imagem'])) {
+        $imagem = $dadosProduto['imagem'];
+      } else {
+        $imagem = null; // Define uma imagem padrão ou lida com a ausência de imagem
+      }
     }
 
     if (!empty($nome) && !empty($sku) && !empty($valor) && !empty($descricao)) {
@@ -74,7 +79,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
             </div>
             <div>
               <label class="input-label">Descrição</label>
-              <textarea class="textarea" name="descricao"></textarea>
+              <textarea class="textarea" name="descricao" maxlength="200" placeholder="Digite a descrição com até 200 caracteres"></textarea>
             </div>
             <div class="flex-2">
               <div>

@@ -102,7 +102,7 @@ $usuario = new Usuario("projeto", "localhost", "root", "");
             </div>
             <div>
               <label class="bt-foto" for="bt-foto">Escolher foto</label>
-              <input id="bt-foto" class="bt-arquivo" type="file" name="imagem">
+              <input id="bt-foto" class="bt-arquivo" type="file" name="imagem" style="border: none; font-size: 14px;">
             </div>
           </div>
           <div id="edit-buttons-container" style="display: flex; gap: 50px;">

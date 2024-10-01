@@ -69,7 +69,7 @@ $produto = new Produto("projeto", "localhost", "root", "");
                   if (!empty($dado['imagem'])) {
                       // Converter a imagem para base64 e exibir
                       $imgData = base64_encode($dado['imagem']);
-                      echo "<img src='data:image/jpeg;base64,$imgData' alt='Imagem do Produto' width='100' height='100'>";
+                      echo "<img src='data:image/jpeg;base64,$imgData' alt='Imagem do Produto' width='auto' height='100'>";
                   } else {
                       echo "";
                   }

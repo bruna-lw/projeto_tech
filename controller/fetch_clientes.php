@@ -12,7 +12,7 @@ try {
 
     if (!empty($search)) {
         // Busca clientes com base no parâmetro de pesquisa
-        $cmd = $pdo->prepare("SELECT id_cliente, nome FROM cliente WHERE nome LIKE :search ORDER BY nome");
+        $cmd = $pdo->prepare("SELECT * FROM cliente WHERE nome LIKE :search ORDER BY nome");
         $cmd->bindValue(':search', "%$search%");
         $cmd->execute();
         $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);

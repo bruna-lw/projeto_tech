@@ -31,10 +31,10 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
 
   <?php
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $cpf = filter_input(INPUT_POST, 'cpf', FILTER_SANITIZE_STRING);
-    $telefone = filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING);
+    $nome = trim(filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING));
+    $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
+    $cpf = trim(filter_input(INPUT_POST, 'cpf', FILTER_SANITIZE_STRING));
+    $telefone = trim(filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING));
 
     if (!empty($nome) && !empty($email) && !empty($cpf)) {
       if (!$cliente->cadastrarCliente($nome, $email, $cpf, $telefone)) {

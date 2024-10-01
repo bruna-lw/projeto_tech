@@ -63,11 +63,11 @@ require 'controller/fetch-pedidos.php'
               <th>Produtos</th>
               <th>Valor</th>
               <th>Status</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <?php
-              // $dados = $pedido->buscarDados();
               if(count($dadosPedido) > 0){
                 foreach ($dadosPedido as $dado) {
                   echo "<tr>";
@@ -76,8 +76,8 @@ require 'controller/fetch-pedidos.php'
                   echo "<td>".$dado['nome_cliente']."</td>";
                   echo "<td>".$dado['produtos']."</td>";
                   echo "<td>".$dado['valor_total']."</td>";
-                  echo "<td>
-                          <span class='status-text'>".$dado['status']."</span>
+                  echo "<td>".$dado['status']."</td>";
+                  echo "<td>                          
                           <a href='editar-status-pedido.php?id_up=".$dado['id_pedido']."' class='edit-button'>Editar</a>
                         </td>";
                   echo "</tr>";

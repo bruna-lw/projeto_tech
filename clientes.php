@@ -20,6 +20,17 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="stylesheet" href="https://use.typekit.net/tvf0cut.css">
   <link rel="stylesheet" href="./assets/css/styles2.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .search-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #cliente-input {
+      width: 300px;
+    }
+  </style>
 </head>
 
 <body>
@@ -37,6 +48,12 @@ $cliente = new Cliente("projeto", "localhost", "root", "");
         </a>
         <a href="cadastro-cliente.php" class="button-default bt-add">Adicionar novo cliente</a>
       </div>
+      <div class="search-container">
+        <label for="">Buscar cliente:</label>
+        <input type="text" id="cliente-input" placeholder="Digite o nome do cliente" list="cliente-list" autocomplete="off" style="margin: 10px 0; width: 200px; height: 20px;">
+        <datalist id="cliente-list"></datalist>
+      </div>
+      <script src="controller/busca_cliente.js"></script>
       <div class="shadow-table">
         <table>
           <thead>

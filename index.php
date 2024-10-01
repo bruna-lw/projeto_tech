@@ -26,8 +26,6 @@
           Login
         </p>
         <p class="login-text">
-          <!-- Caso seja admin, entre com o seu login de cliente da <a href="https://essentia.com.br/"
-            target="_blank">Essentia Pharma.</a> -->
         </p>
       </div>
       <div class="login-container-small">
@@ -40,7 +38,7 @@
             </div>
             <div>
               <label class="input-label-password">Senha</label>
-              <input type="password" class="password-input" id="data-password" name="senha">
+              <input type="password" class="password-input" id="data-password" name="senha" autocomplete="current-password" required>
               <small id="textPassword"></small>
             </div>
           </div>

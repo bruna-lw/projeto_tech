@@ -67,7 +67,7 @@ require 'conecta-servidor.php';
             Redefinir Senha
         </p>
       </div>
-      <div class="login container-small">
+      <div class="login container-small" style="margin: 10px 0 0 0;">
         <form action="redefinir-senha.php" method="post" id="form-input-login">
           <!-- <input type="hidden" name="email" value="<?php echo $_GET['email']; ?>" /> -->
           <div class="input-login">
