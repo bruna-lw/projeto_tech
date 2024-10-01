@@ -1,1 +1,0 @@
-# projeto-capacitacao-tecnologia
